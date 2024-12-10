@@ -10,11 +10,26 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Project {
+    id              String          @id @default(cuid())
+    createdAt       DateTime        @default(now())
+    UpdatedAt       DateTime        @updatedAt
+    name            String
+    githubUrl       String
+    deletedAt       DateTime?
+    userToProjects  UserToProject[] @relation("UserToProjectsOnProjects")
+}
 
-    @@index([name])
+model User {
+    id              String          @id @default(cuid())
+    userToProjects  UserToProject[] @relation("UserToProjectsOnUsers")
+}
+
+model UserToProject {
+    id          String   @id @default(cuid())
+    userId      String
+    projectId   String
+    user        User      @relation("UserToProjectsOnUsers", fields: [userId], references: [id])
+    project     Project   @relation("UserToProjectsOnProjects", fields: [projectId], references: [id])
+    @@unique([userId, projectId])
 }
