@@ -1,4 +1,4 @@
-import "server-only";
+"use server";
 import { createHydrationHelpers } from "@trpc/react-query/rsc";
 import { cache } from "react";
 import { createCaller, type AppRouter } from "@/server/api/root";
